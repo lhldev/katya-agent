@@ -20,4 +20,6 @@ services:
     container_name: omniroute-bridge
     restart: unless-stopped
     network_mode: host
-    command: TCP-LISTEN:20129,bind=172.18.0.1,fork,reuseaddr TCP:127.0.0.1:20128
+    # host.docker.internal resolves to the host's docker0 IP (172.17.0.1),
+    # not the compose bridge IP, so listen there.
+    command: TCP-LISTEN:20129,bind=172.17.0.1,fork,reuseaddr TCP:127.0.0.1:20128

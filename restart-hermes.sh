@@ -4,7 +4,7 @@
 #
 # 1. Initialize the containerized topology
 docker compose down
-docker compose up -d
+docker compose up -d --build
 
 # 2. Introduce a brief temporal delay to ensure the primary desktop processes are fully initialized
 sleep 5
