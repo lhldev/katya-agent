@@ -1,6 +1,7 @@
 services:
   hermes-desktop:
-    image: neoplanetz/hermes-desktop-docker:latest
+    build: .
+    image: hermes-desktop-telegram:latest
     container_name: hermes-desktop
     restart: unless-stopped
     environment:
