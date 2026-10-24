@@ -1,0 +1,16 @@
+services:
+  hermes-desktop:
+    image: neoplanetz/hermes-desktop-docker:latest
+    container_name: hermes-desktop
+    restart: unless-stopped
+    environment:
+      - HERMES_USER=${HERMES_USER}
+      - HERMES_PASSWORD=${HERMES_PASSWORD}
+      - OMNIROUTE_BASE_URL=${OMNIROUTE_BASE_URL}
+      - OMNIROUTE_API_KEY=${OMNIROUTE_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    ports:
+      - 127.0.0.1:6080:6080 # Web VNC for Computer Use
+      - 127.0.0.1:9119:9119 # Hermes Dashboard
+    volumes:
+      - ./data:/opt/data

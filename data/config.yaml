@@ -1,0 +1,18 @@
+providers:
+  omniroute:
+    type: openai
+    base_url: ${OMNIROUTE_BASE_URL}
+    api_key: ${OMNIROUTE_API_KEY}
+    models:
+      - auto/cheap
+model:
+  default: omniroute/auto/cheap
+  provider: omniroute
+
+gateway:
+  channels:
+    telegram:
+      enabled: true
+      bot_token: ${TELEGRAM_BOT_TOKEN}
+      telegram_allowed_users: ${TELEGRAM_NUMERIC_ID}
+      polling: true
