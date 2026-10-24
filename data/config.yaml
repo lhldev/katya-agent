@@ -1,7 +1,7 @@
 model:
   provider: custom
   default: auto/cheap
-  base_url: http://host.docker.internal:20128/v1
+  base_url: http://host.docker.internal:20129/v1
   api_key: ${OMNIROUTE_API_KEY}
 
 platforms:

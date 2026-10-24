@@ -3,20 +3,20 @@ services:
     image: neoplanetz/hermes-desktop-docker:latest
     container_name: hermes-desktop
     restart: unless-stopped
+    environment:
+      - HERMES_USER=${HERMES_USER}
+      - HERMES_PASSWORD=${HERMES_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:6080:6080"
       - "127.0.0.1:9119:9119"
     volumes:
-      - ./data:/home/lhl/.hermes
+      - ./data:/home/${HERMES_USER}/.hermes
 
-  hermes-gateway:
-    image: nousresearch/hermes-agent:0.17.0
-    container_name: hermes-gateway
+  omniroute-bridge:
+    image: alpine/socat
+    container_name: omniroute-bridge
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./data:/root/.hermes
-    command: gateway run
+    network_mode: host
+    command: TCP-LISTEN:20129,bind=172.18.0.1,fork,reuseaddr TCP:127.0.0.1:20128
