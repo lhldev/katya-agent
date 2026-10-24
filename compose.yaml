@@ -4,22 +4,13 @@ services:
     image: hermes-desktop-telegram:latest
     container_name: hermes-desktop
     restart: unless-stopped
+    # Host networking lets the gateway reach OmniRoute on 127.0.0.1:20128
+    # directly, with no socat bridge and no container-to-host firewall hole.
+    # UFW's default INPUT policy is DROP, so the dashboard/VNC stay off the
+    # LAN and remain reachable on 127.0.0.1.
+    network_mode: host
     environment:
       - HERMES_USER=${HERMES_USER}
       - HERMES_PASSWORD=${HERMES_PASSWORD}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    ports:
-      - "127.0.0.1:6080:6080"
-      - "127.0.0.1:9119:9119"
     volumes:
       - ./data:/home/${HERMES_USER}/.hermes
-
-  omniroute-bridge:
-    image: alpine/socat
-    container_name: omniroute-bridge
-    restart: unless-stopped
-    network_mode: host
-    # host.docker.internal resolves to the host's docker0 IP (172.17.0.1),
-    # not the compose bridge IP, so listen there.
-    command: TCP-LISTEN:20129,bind=172.17.0.1,fork,reuseaddr TCP:127.0.0.1:20128

@@ -3,7 +3,7 @@
 # Hermes will be stoped once ever restart happends. issue 49502
 #
 # 1. Initialize the containerized topology
-docker compose down
+docker compose down --remove-orphans
 docker compose up -d --build
 
 # 2. Introduce a brief temporal delay to ensure the primary desktop processes are fully initialized
