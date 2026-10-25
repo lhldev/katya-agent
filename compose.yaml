@@ -23,7 +23,8 @@ services:
       cp -rn /etc/skel/. /home/${HERMES_USER}/ 2>/dev/null || true;
       mkdir -p /home/${HERMES_USER}/.hermes;
       cp /tmp/.env /home/${HERMES_USER}/.hermes/.env 2>/dev/null || true;
-      cp /tmp/config.yaml /home/${HERMES_USER}/.hermes/config.yaml 2>/dev/null || true;
+      chmod 400 /home/${HERMES_USER}/.hermes/.env;
+      cp -n /tmp/config.yaml /home/${HERMES_USER}/.hermes/config.yaml 2>/dev/null || true;
       chown -R ${HERMES_USER}:${HERMES_USER} /home/${HERMES_USER};
       chmod 755 /home/${HERMES_USER};
       /entrypoint.sh &
