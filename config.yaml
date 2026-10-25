@@ -1,6 +1,6 @@
 model:
   provider: custom
-  default: auto/cheap
+  default: main-combo
   base_url: http://127.0.0.1:20128/v1
   api_key: ${OMNIROUTE_API_KEY}
 
