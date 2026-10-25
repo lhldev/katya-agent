@@ -21,11 +21,13 @@ services:
       cp -rn /etc/skel/. /home/${HERMES_USER}/ 2>/dev/null || true;
       chown -R 1000:1000 /home/${HERMES_USER};
       chmod 755 /home/${HERMES_USER};
-      cp /tmp/.env /home/${HERMES_USER}/.env 2>/dev/null || true;
-      cp /tmp/config.yaml /home/${HERMES_USER}/config.yaml 2>/dev/null || true;
-      chown 1000:1000 /home/${HERMES_USER}/.env /home/${HERMES_USER}/config.yaml 2>/dev/null || true;
+      mkdir -p /home/${HERMES_USER}/.hermes;
+      cp /tmp/.env /home/${HERMES_USER}/.hermes/.env 2>/dev/null || true;
+      cp /tmp/config.yaml /home/${HERMES_USER}/.hermes/config.yaml 2>/dev/null || true;
+      chown -R 1000:1000 /home/${HERMES_USER}/.hermes;
       /entrypoint.sh &
       sleep 5;
+      set -a; . /home/${HERMES_USER}/.hermes/.env; set +a;
       exec hermes gateway run
       "
     command: ""
