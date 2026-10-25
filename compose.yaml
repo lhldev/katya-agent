@@ -12,6 +12,8 @@ services:
     environment:
       - HERMES_USER=${HERMES_USER}
       - HERMES_PASSWORD=${HERMES_PASSWORD}
+      - TELEGRAM_ALLOWED_USERS=${TELEGRAM_ALLOWED_USERS}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
     volumes:
       - hermes_home_data:/home/${HERMES_USER}
       - ./.env:/tmp/.env:ro
@@ -27,7 +29,6 @@ services:
       chown -R 1000:1000 /home/${HERMES_USER}/.hermes;
       /entrypoint.sh &
       sleep 5;
-      set -a; . /home/${HERMES_USER}/.hermes/.env; set +a;
       exec hermes gateway run
       "
     command: ""
