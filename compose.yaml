@@ -4,6 +4,7 @@ services:
     image: hermes-desktop-telegram:latest
     container_name: hermes-desktop
     restart: unless-stopped
+    network_mode: bridge # To make sure the interface is always docker0 for the setup script
     environment:
       - HERMES_USER=${HERMES_USER}
       - HERMES_PASSWORD=${HERMES_PASSWORD}
