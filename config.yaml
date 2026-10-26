@@ -1,7 +1,7 @@
 model:
   provider: custom
   default: main-combo
-  base_url: http://127.0.0.1:20128/v1
+  base_url: http://host.docker.internal:20128/v1
   api_key: ${OMNIROUTE_API_KEY}
 
 platforms:

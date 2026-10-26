@@ -4,16 +4,18 @@ services:
     image: hermes-desktop-telegram:latest
     container_name: hermes-desktop
     restart: unless-stopped
-    # Host networking lets the gateway reach OmniRoute on 127.0.0.1:20128
-    # directly, with no socat bridge and no container-to-host firewall hole.
-    # UFW's default INPUT policy is DROP, so the dashboard/VNC stay off the
-    # LAN and remain reachable on 127.0.0.1.
-    network_mode: host
     environment:
       - HERMES_USER=${HERMES_USER}
       - HERMES_PASSWORD=${HERMES_PASSWORD}
       - TELEGRAM_ALLOWED_USERS=${TELEGRAM_ALLOWED_USERS}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+    ports:
+      - "127.0.0.1:6080:6080"   # NoVNC (web desktop)
+      - "127.0.0.1:5901:5901"   # VNC
+      - "127.0.0.1:3390:3389"   # RDP (host 3390 -> container 3389)
+      - "127.0.0.1:9119:9119"   # Dashboard
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - hermes_home_data:/home/${HERMES_USER}
       - ./.env:/tmp/.env:ro
