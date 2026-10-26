@@ -1,4 +1,4 @@
-FROM neoplanetz/hermes-desktop-docker:latest
+FROM hermes-desktop:latest
 USER root
 
 # The Hermes venv has no pip binary. The Python 3.11 interpreter that the venv
