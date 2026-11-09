@@ -1,4 +1,30 @@
 services:
+  omniroute-init:
+    image: alpine:latest
+    container_name: omniroute-init
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    entrypoint: >
+      /bin/sh -c "
+      until command -v iptables >/dev/null 2>&1; do
+        apk add --no-cache iptables iptables-legacy || sleep 2;
+      done;
+      sysctl -w net.ipv4.conf.docker0.route_localnet=1;
+      for IPT in iptables iptables-legacy; do
+        if command -v $$IPT >/dev/null 2>&1; then
+          $$IPT -t nat -C PREROUTING -i docker0 -p tcp --dport 20128 -j DNAT --to-destination 127.0.0.1:20128 2>/dev/null ||
+          $$IPT -t nat -A PREROUTING -i docker0 -p tcp --dport 20128 -j DNAT --to-destination 127.0.0.1:20128;
+          $$IPT -C INPUT -i docker0 -d 127.0.0.0/8 -p tcp --dport 20128 -j ACCEPT 2>/dev/null ||
+          $$IPT -I INPUT 1 -i docker0 -d 127.0.0.0/8 -p tcp --dport 20128 -j ACCEPT;
+          $$IPT -C INPUT -i docker0 -d 127.0.0.0/8 -j DROP 2>/dev/null ||
+          $$IPT -I INPUT 2 -i docker0 -d 127.0.0.0/8 -j DROP;
+        fi;
+      done;
+      echo 'Omniroute bridge configured on host. Idling for reboot persistence...' &&
+      exec sleep infinity
+      "
+
   hermes-desktop:
     build: .
     image: hermes-desktop-telegram:latest
